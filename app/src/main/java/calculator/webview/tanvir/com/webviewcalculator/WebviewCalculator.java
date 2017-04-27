@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,6 +17,7 @@ import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -26,11 +28,15 @@ import java.net.URL;
 import java.net.URLConnection;
 
 public class WebviewCalculator extends AppCompatActivity {
-    
-    private WebView webView;
+
+    public WebView webView;
     private final String TAG = "MyWebviewCalculator";
     private ProgressDialog progress;
     private String url;
+
+    Button button =null;
+    Handler mHandler=null;
+    boolean ischange=false;
 
     public void onCreate(Bundle savedInstanceState) {
 
@@ -41,6 +47,8 @@ public class WebviewCalculator extends AppCompatActivity {
 
         webView.getSettings().setJavaScriptEnabled(true);
         webView.loadUrl(url);
+        webView.addJavascriptInterface(new WebAppInterface(this), "Android");
+
         webView.setWebViewClient(new WebViewClient(){
 
             public void onReceivedError(WebView view, int errorCode, String description,String failingUrl) {
@@ -100,6 +108,12 @@ public class WebviewCalculator extends AppCompatActivity {
             return false;
         }
         return false;
+    }
+
+
+    public void showToast(String toast) {
+        Toast.makeText(this, toast, Toast.LENGTH_LONG).show();
+        this.button.setText("very new changed");
     }
 
 }
